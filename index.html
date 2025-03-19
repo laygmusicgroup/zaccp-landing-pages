@@ -39,6 +39,16 @@
             background: #1e1e1e;
             border-radius: 10px;
         }
+        .album-cover {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .youtube-player {
+            display: none;
+            margin-top: 10px;
+        }
         input, button {
             width: 100%;
             padding: 10px;
@@ -60,6 +70,8 @@
             color: #e50914;
             text-decoration: none;
             font-weight: bold;
+            display: block;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -68,11 +80,14 @@
         <h2 id="song-title">Song Title</h2>
         <p>Listen & Download Now</p>
         
-        <iframe id="spotify-embed" style="border-radius:12px" width="100%" height="152" frameBorder="0" allowfullscreen="" 
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <img id="album-cover" class="album-cover" src="" alt="Album Cover" onclick="playSong()">
+        
+        <div id="youtube-player" class="youtube-player">
+            <iframe width="100%" height="200" frameborder="0" allowfullscreen></iframe>
+        </div>
         
         <form id="download-form">
-            <input type="email" id="email" placeholder="Enter your email to download" required>
+            <input type="email" id="email" placeholder="Enter your email to pre-save & download" required>
             <button type="submit">Get Free Download + Pre-Save</button>
         </form>
         
@@ -84,10 +99,17 @@
         // URL Parameters for Dynamic Song Content
         const params = new URLSearchParams(window.location.search);
         const songTitle = params.get("title") || "Song Title";
-        const spotifyURL = params.get("spotify") || "https://open.spotify.com/embed/track/";
+        const youtubeID = params.get("youtube") || "";
+        const albumCover = params.get("cover") || "";
         
         document.getElementById("song-title").innerText = songTitle;
-        document.getElementById("spotify-embed").src = spotifyURL;
+        document.getElementById("album-cover").src = albumCover;
+        
+        function playSong() {
+            const player = document.getElementById("youtube-player");
+            player.innerHTML = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${youtubeID}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+            player.style.display = "block";
+        }
 
         // Handle Form Submission & Track Lead Event
         document.getElementById("download-form").addEventListener("submit", function(e) {
